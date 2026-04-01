@@ -47,7 +47,7 @@ const itemFadeIn = {
 
 // ─── constants ───────────────────────────────────────────────────────────────
 const WA_LINK =
-  "https://wa.me/5491135561787?text=Hola%2C%20quiero%20inscribirme%20al%20curso%20de%20Refrigeraci%C3%B3n"
+  "https://wa.me/5491134404433?text=Hola%2C%20quiero%20inscribirme%20al%20curso%20de%20Refrigeraci%C3%B3n"
 
 const LAUNCH_DATE = new Date("2026-04-03T17:00:00-03:00")
 
@@ -304,7 +304,7 @@ function CarhaSection() {
         >
           <div className="grid md:grid-cols-[auto_1fr] gap-8 items-center">
             <div className="flex justify-center">
-              <div className="relative h-24 w-40">
+              <div className="relative h-36 w-56">
                 <Image
                   src="/carhaa-logo.png"
                   alt="Logo CARHAA"
@@ -345,47 +345,56 @@ function PricingSection() {
             {/* gradient top border */}
             <div className="h-1 bg-gradient-to-r from-[#8B1A1A] to-[#E8A830]" />
             <div className="bg-card p-8 md:p-10 space-y-6">
-              <div className="text-center space-y-1">
+              {/* header */}
+              <div className="text-center space-y-2">
                 <span className="inline-block px-3 py-1 rounded-3xl bg-primary/10 text-primary text-sm">
-                  Inversión
+                  Cupos limitados
                 </span>
-                <h2 className="text-3xl font-bold">Precio transparente</h2>
+                <h2 className="text-3xl font-bold">Empezá tu carrera por menos de lo que pensás</h2>
+                <p className="text-muted-foreground text-sm">Una habilidad concreta, un certificado real y una profesión con demanda creciente. Todo en 6 meses, un día por semana.</p>
               </div>
 
-              <div className="space-y-3">
-                <div className="flex justify-between items-center py-3 border-b border-[rgba(255,255,255,0.06)]">
-                  <span className="text-muted-foreground">Inscripción</span>
-                  <span className="font-semibold text-foreground">$20.000</span>
+              {/* precio */}
+              <div className="rounded-2xl bg-background/50 p-6 text-center space-y-1">
+                <p className="text-muted-foreground text-sm">Solo pagás</p>
+                <div className="flex items-end justify-center gap-1">
+                  <span className="text-5xl font-extrabold text-accent">$80.000</span>
+                  <span className="text-muted-foreground mb-1">/mes · 6 meses</span>
                 </div>
-                <div className="flex justify-between items-center py-3 border-b border-[rgba(255,255,255,0.06)]">
-                  <span className="text-muted-foreground">Cuota mensual</span>
-                  <div className="text-right">
-                    <span className="text-3xl font-bold text-accent">$80.000</span>
-                    <span className="text-muted-foreground text-sm"> × 6 meses</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center py-3">
-                  <span className="text-foreground font-semibold">Inversión total</span>
-                  <span className="font-bold text-foreground text-xl">$500.000</span>
-                </div>
+                <p className="text-muted-foreground text-xs">+ Inscripción $20.000 (única vez)</p>
               </div>
 
-              <div className="space-y-2">
-                <p className="text-muted-foreground text-sm">Medios de pago</p>
-                <div className="flex flex-wrap gap-2">
-                  {["Efectivo", "Transferencia", "Tarjeta (MercadoPago)"].map((m) => (
-                    <span
-                      key={m}
-                      className="px-3 py-1 rounded-full border border-[rgba(255,255,255,0.06)] bg-background text-sm text-muted-foreground"
-                    >
-                      {m}
-                    </span>
-                  ))}
-                </div>
+              {/* beneficios */}
+              <ul className="space-y-2">
+                {[
+                  "Cursás solo los viernes — seguís trabajando",
+                  "Certificado oficial + matrícula CARHAA",
+                  "Herramientas y materiales incluidos",
+                  "Salida laboral real desde el primer mes",
+                ].map((b) => (
+                  <li key={b} className="flex items-center gap-2 text-sm text-foreground">
+                    <span className="text-accent font-bold">✓</span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+
+              {/* medios de pago */}
+              <div className="flex flex-wrap gap-2">
+                {["Efectivo", "Transferencia", "Tarjeta (MercadoPago)"].map((m) => (
+                  <span
+                    key={m}
+                    className="px-3 py-1 rounded-full border border-[rgba(255,255,255,0.06)] bg-background text-xs text-muted-foreground"
+                  >
+                    {m}
+                  </span>
+                ))}
               </div>
 
-              <div className="pt-2">
-                <WhatsAppButton label="Reservar mi lugar" large />
+              {/* CTA */}
+              <div className="pt-2 flex flex-col items-center gap-2">
+                <WhatsAppButton label="Quiero reservar mi lugar" large />
+                <p className="text-muted-foreground text-xs">Los cupos se agotan — respondemos en menos de 15 min</p>
               </div>
             </div>
           </div>
@@ -564,6 +573,12 @@ function LocationSection() {
               <div className="flex items-center gap-3">
                 <Calendar className="h-5 w-5 text-accent flex-shrink-0" />
                 <p className="text-muted-foreground text-sm">Viernes 17:00 a 19:00 hs</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Clock className="h-5 w-5 text-accent flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Lunes a Sábados · 9:00 a 18:00 hs</p>
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <Car className="h-5 w-5 text-accent flex-shrink-0" />
@@ -863,8 +878,8 @@ export function ISOLanding() {
                 className="relative h-[350px] md:h-[500px] rounded-3xl overflow-hidden"
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=900&q=80"
-                  alt="Técnico trabajando en equipo de refrigeración"
+                  src="/hero-tecnico.webp"
+                  alt="Técnico en Refrigeración trabajando"
                   fill
                   className="object-cover"
                   priority
