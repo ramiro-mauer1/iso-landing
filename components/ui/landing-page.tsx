@@ -20,7 +20,7 @@ import {
   Users,
   Package,
 } from "lucide-react"
-import { motion, AnimatePresence } from "motion/react"
+import { motion, AnimatePresence } from "framer-motion"
 
 // ─── types ───────────────────────────────────────────────────────────────────
 declare global {
@@ -241,14 +241,14 @@ function InstructorSection() {
           variants={fadeIn}
           className="border border-[rgba(255,255,255,0.06)] rounded-3xl bg-card overflow-hidden"
         >
-          <div className="grid md:grid-cols-2 gap-0">
+          <div className="grid md:grid-cols-[1fr_2fr] gap-0">
             {/* imagen */}
-            <div className="relative h-64 md:h-auto min-h-[320px]">
+            <div className="relative aspect-[3/4] md:aspect-auto md:min-h-full">
               <Image
-                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80"
+                src="/ivan-profe.jpg"
                 alt="Iván — Instructor de Refrigeración"
                 fill
-                className="object-cover"
+                className="object-cover object-top"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent md:bg-gradient-to-r" />
             </div>
@@ -467,29 +467,16 @@ function TestimonialsSection() {
 function GallerySection() {
   const images = [
     {
-      src: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80",
-      alt: "Técnico trabajando en unidad de aire acondicionado",
-      className: "col-span-2 row-span-2",
+      src: "/ivan-profe.jpg",
+      alt: "Iván trabajando en el taller",
     },
     {
-      src: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&q=80",
-      alt: "Herramientas de refrigeración",
-      className: "col-span-1 row-span-1",
+      src: "/ivan-y-alumno.jpg",
+      alt: "Iván con un alumno en el taller",
     },
     {
-      src: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&q=80",
-      alt: "Instalación de equipo split",
-      className: "col-span-1 row-span-1",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&q=80",
-      alt: "Manómetros de refrigeración",
-      className: "col-span-1 row-span-1",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
-      alt: "Práctica en taller",
-      className: "col-span-1 row-span-1",
+      src: "/ivan-enseñando.jpg",
+      alt: "Iván enseñando en clase",
     },
   ]
 
@@ -517,19 +504,19 @@ function GallerySection() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={staggerContainer}
-          className="grid grid-cols-2 md:grid-cols-3 gap-3 auto-rows-[200px]"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-3"
         >
-          {images.map(({ src, alt, className }) => (
+          {images.map(({ src, alt }) => (
             <motion.div
               key={src}
               variants={itemFadeIn}
-              className={`relative overflow-hidden rounded-3xl group ${className}`}
+              className="relative overflow-hidden rounded-3xl group aspect-[3/4]"
             >
               <Image
                 src={src}
                 alt={alt}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
             </motion.div>
