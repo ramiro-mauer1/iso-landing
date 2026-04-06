@@ -19,6 +19,11 @@ import {
   Clock,
   Users,
   Package,
+  Check,
+  TrendingUp,
+  Banknote,
+  Briefcase,
+  AlertCircle,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -31,13 +36,13 @@ declare global {
 
 // ─── animation variants ──────────────────────────────────────────────────────
 const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65 } },
 }
 
 const staggerContainer = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
 }
 
 const itemFadeIn = {
@@ -60,14 +65,38 @@ function trackAndOpen() {
 
 // ─── sub-components ──────────────────────────────────────────────────────────
 
-function WhatsAppButton({ label = "Quiero inscribirme", large = false }: { label?: string; large?: boolean }) {
+function WhatsAppButton({
+  label = "Quiero inscribirme",
+  large = false,
+  variant = "default",
+}: {
+  label?: string
+  large?: boolean
+  variant?: "default" | "outline"
+}) {
+  if (variant === "outline") {
+    return (
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+        onClick={trackAndOpen}
+        className={`inline-flex items-center gap-2 border border-accent text-accent font-semibold transition-all hover:bg-accent/10 cursor-pointer ${
+          large ? "px-8 py-4 text-base" : "px-5 py-2.5 text-sm"
+        }`}
+      >
+        <MessageCircle className={large ? "h-5 w-5" : "h-4 w-4"} />
+        {label}
+      </motion.button>
+    )
+  }
+
   return (
     <motion.button
-      whileHover={{ scale: 1.03 }}
+      whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.97 }}
       onClick={trackAndOpen}
-      className={`inline-flex items-center gap-2 rounded-3xl bg-accent text-accent-foreground font-semibold transition-colors hover:bg-[#d4921a] cursor-pointer ${
-        large ? "px-8 py-4 text-lg" : "px-6 py-3 text-sm"
+      className={`inline-flex items-center gap-2 bg-accent text-accent-foreground font-bold transition-colors hover:bg-[#d4921a] cursor-pointer ${
+        large ? "px-8 py-4 text-base" : "px-5 py-2.5 text-sm"
       }`}
     >
       <MessageCircle className={large ? "h-5 w-5" : "h-4 w-4"} />
@@ -76,6 +105,243 @@ function WhatsAppButton({ label = "Quiero inscribirme", large = false }: { label
   )
 }
 
+// ─── TRUST BAR ───────────────────────────────────────────────────────────────
+function TrustBar() {
+  const stats = [
+    { value: "15", unit: "AÑOS", label: "formando técnicos" },
+    { value: "+400", unit: "EGRESADOS", label: "ya trabajan en el rubro" },
+    { value: "6", unit: "MESES", label: "para salir habilitado" },
+    { value: "1", unit: "DÍA/SEM", label: "solo los viernes" },
+  ]
+
+  return (
+    <div className="w-full bg-primary border-y border-primary/80">
+      <div className="container px-4 md:px-6">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="grid grid-cols-2 md:grid-cols-4 divide-x divide-primary-foreground/10"
+        >
+          {stats.map(({ value, unit, label }) => (
+            <motion.div
+              key={unit}
+              variants={itemFadeIn}
+              className="flex flex-col items-center py-5 px-4 text-center"
+            >
+              <div className="flex items-baseline gap-1">
+                <span className="font-display text-4xl md:text-5xl text-accent leading-none">
+                  {value}
+                </span>
+                <span className="font-mono text-xs text-accent/80 tracking-widest">{unit}</span>
+              </div>
+              <p className="text-primary-foreground/60 text-xs mt-1">{label}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
+// ─── QUALIFICATION SECTION ────────────────────────────────────────────────────
+function QualificationSection() {
+  const checks = [
+    "Querés aprender un oficio concreto con salida laboral real, no otro título que no sirve",
+    "Buscás independizarte o sumar un ingreso extra trabajando por tu cuenta",
+    "Podés dedicar un viernes por semana — solo 2 horas, de 17 a 19 hs",
+    "Estás cansado de no tener una habilidad técnica que te diferencie",
+    "Querés un certificado profesional reconocido en toda la industria",
+  ]
+
+  const nopes = [
+    "Si ya sos técnico matriculado y solo buscás cursos avanzados",
+    "Si no podés comprometerte con la cursada presencial",
+  ]
+
+  return (
+    <section className="w-full py-16 md:py-24 bg-card/40">
+      <div className="container px-4 md:px-6">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            className="mb-10"
+          >
+            <span className="section-label">Calificación</span>
+            <h2 className="font-display text-5xl md:text-7xl text-foreground mt-4 leading-none tracking-wide">
+              ¿ESTE CURSO<br />
+              <span className="text-accent">ES PARA VOS?</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-[3fr_2fr] gap-8 items-start">
+            {/* SÍ */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="space-y-3"
+            >
+              <p className="font-mono text-xs uppercase tracking-widest text-accent/70 mb-4">
+                ✓ Sí es para vos si...
+              </p>
+              {checks.map((text, i) => (
+                <motion.div
+                  key={i}
+                  variants={itemFadeIn}
+                  className="flex gap-4 items-start border-l-2 border-accent/30 pl-4 py-1 hover:border-accent transition-colors duration-300"
+                >
+                  <div className="mt-0.5 flex-shrink-0 h-5 w-5 bg-accent/15 flex items-center justify-center">
+                    <Check className="h-3 w-3 text-accent" />
+                  </div>
+                  <p className="text-foreground/80 text-sm leading-relaxed">{text}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* NO */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="space-y-3"
+            >
+              <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-4">
+                ✗ No es para vos si...
+              </p>
+              {nopes.map((text, i) => (
+                <motion.div
+                  key={i}
+                  variants={itemFadeIn}
+                  className="flex gap-4 items-start border-l-2 border-white/10 pl-4 py-1"
+                >
+                  <AlertCircle className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                  <p className="text-muted-foreground text-sm leading-relaxed">{text}</p>
+                </motion.div>
+              ))}
+
+              <motion.div
+                variants={itemFadeIn}
+                className="mt-8 border border-accent/20 bg-accent/5 p-5"
+              >
+                <p className="text-sm text-foreground/70 leading-relaxed">
+                  Si te identificaste con los primeros 5 puntos,{" "}
+                  <span className="text-accent font-semibold">este es tu lugar</span>.
+                  Hay 10 cupos disponibles para la comisión de abril.
+                </p>
+                <div className="mt-4">
+                  <WhatsAppButton label="Reservar mi lugar" />
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── MARKET SECTION ───────────────────────────────────────────────────────────
+function MarketSection() {
+  const dataPoints = [
+    {
+      Icon: Banknote,
+      number: "$300K–$600K",
+      label: "por mes",
+      desc: "Ingreso promedio de un técnico con experiencia en el AMBA. En temporada alta, más.",
+    },
+    {
+      Icon: TrendingUp,
+      number: "+15.000",
+      label: "equipos/año",
+      desc: "Solo en Buenos Aires. Cada equipo instalado requiere service, reparaciones y mantenimiento.",
+    },
+    {
+      Icon: Briefcase,
+      number: "70%",
+      label: "trabaja por su cuenta",
+      desc: "De nuestros egresados empieza a facturar de manera independiente antes de los 6 meses post-egreso.",
+    },
+  ]
+
+  return (
+    <section className="w-full py-16 md:py-24 overflow-hidden">
+      <div className="container px-4 md:px-6">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeIn}
+          className="mb-12"
+        >
+          <span className="section-label">Mercado laboral</span>
+          <h2 className="font-display text-5xl md:text-7xl text-foreground mt-4 leading-none tracking-wide">
+            EL RUBRO QUE<br />
+            <span className="text-accent">NO PARA DE CRECER</span>
+          </h2>
+          <p className="text-muted-foreground mt-4 max-w-xl">
+            El verano trae calor, el invierno trae frío. Los técnicos en refrigeración trabajan todo el año,
+            con demanda que supera a la oferta de profesionales habilitados.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="grid md:grid-cols-3 gap-px bg-white/5"
+        >
+          {dataPoints.map(({ Icon, number, label, desc }) => (
+            <motion.div
+              key={label}
+              variants={itemFadeIn}
+              className="bg-background p-8 space-y-4 group hover:bg-card transition-colors duration-300"
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 border border-primary/30 flex items-center justify-center bg-primary/5 group-hover:bg-primary/10 transition-colors">
+                  <Icon className="h-5 w-5 text-primary" />
+                </div>
+                <div className="h-px flex-1 bg-white/5" />
+              </div>
+              <div>
+                <span className="font-display text-5xl md:text-6xl text-accent tracking-wide leading-none block">
+                  {number}
+                </span>
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-widest">{label}</span>
+              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed border-t border-white/5 pt-4">
+                {desc}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeIn}
+          className="mt-6 border border-primary/20 bg-primary/5 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+        >
+          <p className="text-sm text-foreground/70 max-w-lg">
+            <span className="text-foreground font-semibold">La inversión en el curso es de $20.000 de inscripción + $80.000/mes × 6 meses.</span>{" "}
+            Un trabajo de un fin de semana como técnico habilitado puede recuperar ese monto.
+          </p>
+          <WhatsAppButton label="Quiero saber más" />
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+// ─── COUNTDOWN ───────────────────────────────────────────────────────────────
 function CountdownBlock() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 })
 
@@ -97,38 +363,55 @@ function CountdownBlock() {
   const pad = (n: number) => String(n).padStart(2, "0")
 
   return (
-    <section className="w-full py-12 md:py-16">
+    <section className="w-full py-12 md:py-16 bg-primary">
       <div className="container px-4 md:px-6">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="border border-[rgba(255,255,255,0.06)] rounded-3xl bg-card p-8 md:p-12 text-center space-y-6"
+          className="flex flex-col md:flex-row items-center justify-between gap-8"
         >
-          <p className="text-muted-foreground text-sm uppercase tracking-widest font-mono">
-            Próximo inicio — 3 de abril 2026
-          </p>
-          <div className="flex justify-center gap-4 md:gap-8">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-widest text-primary-foreground/60 mb-2">
+              Próximo inicio
+            </p>
+            <p className="font-display text-4xl md:text-5xl text-primary-foreground tracking-wide">
+              3 DE ABRIL 2026
+            </p>
+            <div className="mt-3 border border-accent/30 bg-accent/10 px-4 py-2 inline-block">
+              <p className="text-sm text-accent font-semibold">
+                Solo quedan <span className="font-bold">10 cupos</span> — cuando se llenan, la siguiente apertura es en meses
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 md:gap-6">
             {[
               { label: "Días", value: pad(timeLeft.days) },
               { label: "Horas", value: pad(timeLeft.hours) },
-              { label: "Minutos", value: pad(timeLeft.minutes) },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex flex-col items-center gap-1">
-                <span className="font-mono text-5xl md:text-7xl font-bold text-accent tabular-nums">
-                  {value}
-                </span>
-                <span className="text-muted-foreground text-xs uppercase tracking-widest font-mono">
-                  {label}
-                </span>
+              { label: "Min", value: pad(timeLeft.minutes) },
+            ].map(({ label, value }, i) => (
+              <div key={label} className="flex items-center gap-3 md:gap-6">
+                <div className="flex flex-col items-center">
+                  <span className="font-display text-6xl md:text-8xl text-accent tabular-nums leading-none">
+                    {value}
+                  </span>
+                  <span className="font-mono text-xs text-primary-foreground/50 uppercase tracking-widest mt-1">
+                    {label}
+                  </span>
+                </div>
+                {i < 2 && (
+                  <span className="font-display text-4xl text-primary-foreground/30 pb-4">:</span>
+                )}
               </div>
             ))}
           </div>
-          <div className="border border-[#E8A830]/40 rounded-2xl bg-[#E8A830]/5 px-6 py-4 max-w-xl mx-auto">
-            <p className="text-foreground text-sm md:text-base">
-              Solo quedan <span className="font-bold text-accent">10 cupos</span> para la comisión de abril.{" "}
-              Cuando se llenan, la siguiente apertura es en meses.
+
+          <div className="flex-shrink-0">
+            <WhatsAppButton label="Reservar mi lugar" large />
+            <p className="text-primary-foreground/40 text-xs mt-2 text-center">
+              Respondemos en &lt; 15 min
             </p>
           </div>
         </motion.div>
@@ -137,6 +420,7 @@ function CountdownBlock() {
   )
 }
 
+// ─── MODULES ─────────────────────────────────────────────────────────────────
 function ModulesSection() {
   const modules = [
     {
@@ -178,23 +462,23 @@ function ModulesSection() {
   ]
 
   return (
-    <section id="modulos" className="w-full py-16 md:py-24">
+    <section id="modulos" className="w-full py-16 md:py-24 bg-card/40">
       <div className="container px-4 md:px-6">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="text-center space-y-3 mb-12"
+          className="mb-12"
         >
-          <span className="inline-block px-3 py-1 rounded-3xl bg-card border border-[rgba(255,255,255,0.06)] text-muted-foreground text-sm">
-            Plan de estudios
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-            Qué vas a aprender
+          <span className="section-label">Plan de estudios</span>
+          <h2 className="font-display text-5xl md:text-7xl text-foreground mt-4 leading-none tracking-wide">
+            QUÉ VAS A<br />
+            <span className="text-accent">APRENDER</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            6 módulos progresivos que te llevan de cero a técnico habilitado.
+          <p className="text-muted-foreground mt-4 max-w-xl">
+            6 módulos progresivos diseñados por alguien que trabaja en el rubro todos los días.
+            De cero a técnico habilitado.
           </p>
         </motion.div>
 
@@ -203,33 +487,53 @@ function ModulesSection() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={staggerContainer}
-          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-px bg-white/5 md:grid-cols-2 lg:grid-cols-3"
         >
           {modules.map(({ num, title, desc, Icon }) => (
             <motion.div
               key={num}
               variants={itemFadeIn}
-              whileHover={{ y: -4 }}
-              className="group border border-[rgba(255,255,255,0.06)] rounded-3xl bg-card p-6 space-y-4 transition-colors hover:border-primary/30"
+              className="group bg-background hover:bg-card p-6 space-y-4 transition-colors duration-300 relative overflow-hidden"
             >
-              <div className="flex items-start justify-between">
-                <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center">
-                  <Icon className="h-5 w-5 text-primary" />
+              {/* número de fondo */}
+              <span className="absolute top-2 right-3 font-display text-7xl text-white/[0.03] leading-none select-none pointer-events-none">
+                {num}
+              </span>
+
+              <div className="flex items-center justify-between">
+                <div className="h-9 w-9 border border-primary/30 bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                  <Icon className="h-4 w-4 text-primary" />
                 </div>
                 <span className="font-mono text-xs text-muted-foreground">{num}</span>
               </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-1">{title}</h3>
+
+              <div className="border-l-2 border-accent/20 group-hover:border-accent/60 pl-3 transition-colors duration-300">
+                <h3 className="font-semibold text-foreground mb-1 text-sm">{title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
               </div>
             </motion.div>
           ))}
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeIn}
+          className="mt-8 flex items-center gap-4 border-l-4 border-accent pl-5"
+        >
+          <Hammer className="h-5 w-5 text-accent flex-shrink-0" />
+          <p className="text-sm text-foreground/70">
+            <span className="text-foreground font-semibold">Práctica desde el día uno.</span>{" "}
+            No hay módulo teórico sin su correspondiente práctica en taller con equipos reales.
+          </p>
         </motion.div>
       </div>
     </section>
   )
 }
 
+// ─── INSTRUCTOR ───────────────────────────────────────────────────────────────
 function InstructorSection() {
   return (
     <section id="instructor" className="w-full py-16 md:py-24">
@@ -239,49 +543,61 @@ function InstructorSection() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="border border-[rgba(255,255,255,0.06)] rounded-3xl bg-card overflow-hidden"
+          className="overflow-hidden border border-white/5"
         >
           <div className="grid md:grid-cols-[1fr_2fr] gap-0">
             {/* imagen */}
-            <div className="relative aspect-[3/4] md:aspect-auto md:min-h-full">
+            <div className="relative aspect-[3/4] md:aspect-auto md:min-h-full min-h-[300px]">
               <Image
                 src="/ivan-profe.jpg"
                 alt="Iván — Instructor de Refrigeración"
                 fill
                 className="object-cover object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent md:bg-gradient-to-r" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-background/30" />
+              {/* badge sobre la imagen */}
+              <div className="absolute bottom-4 left-4 bg-primary px-3 py-1.5">
+                <p className="font-mono text-xs text-primary-foreground/80 uppercase tracking-widest">
+                  Tu instructor
+                </p>
+              </div>
             </div>
 
             {/* contenido */}
-            <div className="p-8 md:p-12 flex flex-col justify-center space-y-6">
+            <div className="p-8 md:p-12 flex flex-col justify-center space-y-6 bg-card">
               <div>
-                <span className="inline-block px-3 py-1 rounded-3xl bg-primary/10 text-primary text-sm font-medium mb-4">
-                  Tu instructor
-                </span>
-                <h2 className="text-3xl font-bold mb-2">Iván</h2>
+                <h2 className="font-display text-5xl md:text-6xl text-foreground tracking-wide leading-none mb-3">
+                  IVÁN
+                </h2>
                 <p className="text-muted-foreground leading-relaxed">
                   Técnico en refrigeración con 15 años de experiencia en el rubro. Capacitó a más de 400 alumnos
                   y sigue trabajando activamente en instalaciones y service, llevando al aula lo que vive todos
                   los días en el campo.
                 </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  No es solo un docente: es el dueño del instituto y trabaja en el rubro mientras te enseña.
+                  Lo que te explica hoy, lo hizo ayer.
+                </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 {[
-                  { value: "15 años", label: "en el rubro" },
-                  { value: "+400", label: "alumnos capacitados" },
-                ].map(({ value, label }) => (
-                  <div key={label} className="border border-[rgba(255,255,255,0.06)] rounded-2xl p-4 bg-background">
-                    <p className="text-2xl font-bold text-accent">{value}</p>
-                    <p className="text-muted-foreground text-sm">{label}</p>
+                  { value: "15", unit: "AÑOS", label: "en el rubro" },
+                  { value: "+400", unit: "ALUMNOS", label: "capacitados" },
+                ].map(({ value, unit, label }) => (
+                  <div key={label} className="border border-white/5 bg-background p-4">
+                    <div className="flex items-baseline gap-1">
+                      <span className="font-display text-4xl text-accent leading-none">{value}</span>
+                      <span className="font-mono text-xs text-accent/60 tracking-widest">{unit}</span>
+                    </div>
+                    <p className="text-muted-foreground text-xs mt-1">{label}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground border-l-2 border-accent/30 pl-3">
                 <Award className="h-4 w-4 text-accent flex-shrink-0" />
-                Técnico experimentado y dueño del instituto
+                Técnico matriculado · Dueño del Instituto Superior de Oficios
               </div>
             </div>
           </div>
@@ -291,36 +607,122 @@ function InstructorSection() {
   )
 }
 
-function CarhaSection() {
+// ─── TESTIMONIALS ─────────────────────────────────────────────────────────────
+function TestimonialsSection() {
+  const testimonials = [
+    {
+      quote:
+        "Arranqué sin saber nada y hoy hago instalaciones por mi cuenta. En 3 meses ya había recuperado lo que invertí en el curso.",
+      name: "Martín G.",
+      role: "Egresado 2025",
+      outcome: "Instalador independiente",
+    },
+    {
+      quote:
+        "Lo mejor es que cursás un solo día por semana. Yo seguí trabajando mientras estudiaba y hoy me dedico full a esto.",
+      name: "Lucas C.",
+      role: "Egresado 2025",
+      outcome: "Técnico en empresa de HVAC",
+    },
+    {
+      quote:
+        "Las clases son muy prácticas, no es puro pizarrón. Tocás equipos reales desde el principio y eso marca la diferencia.",
+      name: "Diego F.",
+      role: "Egresado 2024",
+      outcome: "Service técnico propio",
+    },
+  ]
+
   return (
-    <section className="w-full py-12 md:py-16 bg-card/50">
+    <section id="testimonios" className="w-full py-16 md:py-24">
       <div className="container px-4 md:px-6">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="border border-[rgba(255,255,255,0.06)] rounded-3xl bg-card p-8 md:p-12"
+          className="mb-12"
+        >
+          <span className="section-label">Egresados</span>
+          <h2 className="font-display text-5xl md:text-7xl text-foreground mt-4 leading-none tracking-wide">
+            LO QUE DICEN<br />
+            <span className="text-accent">LOS ALUMNOS</span>
+          </h2>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="grid gap-px bg-white/5 md:grid-cols-3"
+        >
+          {testimonials.map(({ quote, name, role, outcome }) => (
+            <motion.div
+              key={name}
+              variants={itemFadeIn}
+              className="bg-background hover:bg-card transition-colors duration-300 p-8 space-y-5 group"
+            >
+              {/* comillas grandes */}
+              <span className="font-display text-7xl text-primary/20 leading-none block -mb-2">
+                &ldquo;
+              </span>
+
+              <div className="flex gap-0.5 mb-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-3.5 w-3.5 fill-accent text-accent" />
+                ))}
+              </div>
+
+              <p className="text-foreground/80 leading-relaxed text-sm">{quote}</p>
+
+              <div className="border-t border-white/5 pt-4 flex items-start justify-between">
+                <div>
+                  <p className="font-semibold text-foreground text-sm">{name}</p>
+                  <p className="text-muted-foreground text-xs">{role}</p>
+                </div>
+                <div className="bg-accent/10 border border-accent/20 px-2 py-1">
+                  <p className="text-accent text-xs font-mono">{outcome}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+// ─── CARHAA ───────────────────────────────────────────────────────────────────
+function CarhaSection() {
+  return (
+    <section className="w-full py-12 md:py-16 bg-card/40">
+      <div className="container px-4 md:px-6">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeIn}
+          className="border border-white/5 p-8 md:p-12"
         >
           <div className="grid md:grid-cols-[auto_1fr] gap-8 items-center">
             <div className="flex justify-center">
-              <div className="relative h-36 w-56">
-                <Image
-                  src="/carhaa-logo.png"
-                  alt="Logo CARHAA"
-                  fill
-                  className="object-contain"
-                />
+              <div className="relative h-28 w-44">
+                <Image src="/carhaa-logo.png" alt="Logo CARHAA" fill className="object-contain" />
               </div>
             </div>
             <div className="space-y-3">
-              <h2 className="text-2xl md:text-3xl font-bold">Matrícula profesional CARHAA</h2>
+              <span className="section-label">Habilitación profesional</span>
+              <h2 className="font-display text-3xl md:text-4xl text-foreground tracking-wide mt-2">
+                MATRÍCULA PROFESIONAL CARHAA
+              </h2>
               <p className="text-muted-foreground leading-relaxed">
                 Al finalizar el curso, podés matricularte en la{" "}
                 <span className="text-foreground font-medium">
                   Cámara Argentina de Refrigeración, Calefacción y Aire Acondicionado (CARHAA)
                 </span>
                 , obteniendo una credencial profesional reconocida en toda la industria.
+                Con matrícula podés emitir certificados de instalación — requisito en muchas empresas.
               </p>
             </div>
           </div>
@@ -330,6 +732,7 @@ function CarhaSection() {
   )
 }
 
+// ─── PRICING ─────────────────────────────────────────────────────────────────
 function PricingSection() {
   return (
     <section id="precio" className="w-full py-16 md:py-24">
@@ -341,39 +744,48 @@ function PricingSection() {
           variants={fadeIn}
           className="max-w-lg mx-auto"
         >
-          <div className="rounded-3xl overflow-hidden border border-[rgba(255,255,255,0.06)]">
-            {/* gradient top border */}
-            <div className="h-1 bg-gradient-to-r from-[#8B1A1A] to-[#E8A830]" />
+          <div className="border border-accent/20 overflow-hidden">
+            {/* barra superior */}
+            <div className="h-1 bg-gradient-to-r from-primary to-accent" />
+
             <div className="bg-card p-8 md:p-10 space-y-6">
               {/* header */}
-              <div className="text-center space-y-2">
-                <span className="inline-block px-3 py-1 rounded-3xl bg-primary/10 text-primary text-sm">
-                  Cupos limitados
-                </span>
-                <h2 className="text-3xl font-bold">Empezá tu carrera por menos de lo que pensás</h2>
-                <p className="text-muted-foreground text-sm">Una habilidad concreta, un certificado real y una profesión con demanda creciente. Todo en 6 meses, un día por semana.</p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="section-label">Oferta · Cupos limitados</span>
+                  <span className="font-mono text-xs text-accent animate-pulse">● 10 cupos</span>
+                </div>
+                <h2 className="font-display text-4xl md:text-5xl text-foreground tracking-wide leading-none mt-3">
+                  UNA CARRERA POR MENOS<br />DE LO QUE PENSÁS
+                </h2>
+                <p className="text-muted-foreground text-sm leading-relaxed mt-2">
+                  Una habilidad concreta, un certificado real y una profesión con demanda creciente.
+                  Todo en 6 meses, un día por semana.
+                </p>
               </div>
 
               {/* precio */}
-              <div className="rounded-2xl bg-background/50 p-6 text-center space-y-1">
-                <p className="text-muted-foreground text-sm">Solo pagás</p>
-                <div className="flex items-end justify-center gap-1">
-                  <span className="text-5xl font-extrabold text-accent">$80.000</span>
-                  <span className="text-muted-foreground mb-1">/mes · 6 meses</span>
+              <div className="bg-background p-6 space-y-1 border border-white/5">
+                <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest">Solo pagás</p>
+                <div className="flex items-end gap-2">
+                  <span className="font-display text-6xl text-accent leading-none tracking-wide">$80.000</span>
+                  <span className="text-muted-foreground mb-1 text-sm">/mes · 6 meses</span>
                 </div>
                 <p className="text-muted-foreground text-xs">+ Inscripción $20.000 (única vez)</p>
               </div>
 
               {/* beneficios */}
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {[
                   "Cursás solo los viernes — seguís trabajando",
                   "Certificado oficial + matrícula CARHAA",
                   "Herramientas y materiales incluidos",
                   "Salida laboral real desde el primer mes",
                 ].map((b) => (
-                  <li key={b} className="flex items-center gap-2 text-sm text-foreground">
-                    <span className="text-accent font-bold">✓</span>
+                  <li key={b} className="flex items-center gap-3 text-sm text-foreground">
+                    <div className="h-5 w-5 bg-accent/15 flex items-center justify-center flex-shrink-0">
+                      <Check className="h-3 w-3 text-accent" />
+                    </div>
                     {b}
                   </li>
                 ))}
@@ -384,7 +796,7 @@ function PricingSection() {
                 {["Efectivo", "Transferencia", "Tarjeta (MercadoPago)"].map((m) => (
                   <span
                     key={m}
-                    className="px-3 py-1 rounded-full border border-[rgba(255,255,255,0.06)] bg-background text-xs text-muted-foreground"
+                    className="px-3 py-1 border border-white/10 bg-background text-xs text-muted-foreground font-mono"
                   >
                     {m}
                   </span>
@@ -392,9 +804,11 @@ function PricingSection() {
               </div>
 
               {/* CTA */}
-              <div className="pt-2 flex flex-col items-center gap-2">
+              <div className="pt-2 flex flex-col items-stretch gap-3">
                 <WhatsAppButton label="Quiero reservar mi lugar" large />
-                <p className="text-muted-foreground text-xs">Los cupos se agotan — respondemos en menos de 15 min</p>
+                <p className="text-muted-foreground text-xs text-center">
+                  Los cupos se agotan — respondemos en menos de 15 min
+                </p>
               </div>
             </div>
           </div>
@@ -404,89 +818,12 @@ function PricingSection() {
   )
 }
 
-function TestimonialsSection() {
-  const testimonials = [
-    {
-      quote:
-        "Arranqué sin saber nada y hoy hago instalaciones por mi cuenta. En 3 meses ya había recuperado lo que invertí en el curso.",
-      name: "Martín G.",
-      role: "Egresado 2025 — Instalador independiente",
-    },
-    {
-      quote:
-        "Lo mejor es que cursás un solo día por semana. Yo seguí trabajando mientras estudiaba y hoy me dedico full a esto.",
-      name: "Lucas C.",
-      role: "Egresado 2025 — Técnico en empresa de HVAC",
-    },
-    {
-      quote:
-        "Las clases son muy prácticas, no es puro pizarrón. Tocás equipos reales desde el principio y eso marca la diferencia.",
-      name: "Diego F.",
-      role: "Egresado 2024 — Service técnico propio",
-    },
-  ]
-
-  return (
-    <section id="testimonios" className="w-full py-16 md:py-24 bg-card/30">
-      <div className="container px-4 md:px-6">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeIn}
-          className="text-center space-y-3 mb-12"
-        >
-          <span className="inline-block px-3 py-1 rounded-3xl bg-card border border-[rgba(255,255,255,0.06)] text-muted-foreground text-sm">
-            Egresados
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold">Lo que dicen los alumnos</h2>
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
-        >
-          {testimonials.map(({ quote, name, role }) => (
-            <motion.div
-              key={name}
-              variants={itemFadeIn}
-              className="border border-[rgba(255,255,255,0.06)] rounded-3xl bg-card p-6 space-y-4"
-            >
-              <div className="flex gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-accent text-accent" />
-                ))}
-              </div>
-              <p className="text-foreground leading-relaxed">&ldquo;{quote}&rdquo;</p>
-              <div>
-                <p className="font-semibold text-foreground text-sm">{name}</p>
-                <p className="text-muted-foreground text-xs">{role}</p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-
+// ─── GALLERY ─────────────────────────────────────────────────────────────────
 function GallerySection() {
   const images = [
-    {
-      src: "/ivan-profe.jpg",
-      alt: "Iván trabajando en el taller",
-    },
-    {
-      src: "/ivan-y-alumno.jpg",
-      alt: "Iván con un alumno en el taller",
-    },
-    {
-      src: "/ivan-enseñando.jpg",
-      alt: "Iván enseñando en clase",
-    },
+    { src: "/ivan-profe.jpg", alt: "Iván trabajando en el taller" },
+    { src: "/ivan-y-alumno.jpg", alt: "Iván con un alumno en el taller" },
+    { src: "/ivan-enseñando.jpg", alt: "Iván enseñando en clase" },
   ]
 
   return (
@@ -497,13 +834,13 @@ function GallerySection() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="text-center space-y-3 mb-12"
+          className="mb-10"
         >
-          <span className="inline-block px-3 py-1 rounded-3xl bg-card border border-[rgba(255,255,255,0.06)] text-muted-foreground text-sm">
-            Instalaciones
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold">Nuestro taller</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <span className="section-label">Instalaciones</span>
+          <h2 className="font-display text-5xl md:text-6xl text-foreground mt-4 leading-none tracking-wide">
+            NUESTRO TALLER
+          </h2>
+          <p className="text-muted-foreground mt-3 max-w-xl">
             Aprendé en un espacio equipado con herramientas y equipos reales.
           </p>
         </motion.div>
@@ -513,21 +850,21 @@ function GallerySection() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={staggerContainer}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-1"
         >
           {images.map(({ src, alt }) => (
             <motion.div
               key={src}
               variants={itemFadeIn}
-              className="relative overflow-hidden rounded-3xl group aspect-[3/4]"
+              className="relative overflow-hidden group aspect-[3/4]"
             >
               <Image
                 src={src}
                 alt={alt}
                 fill
-                className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+              <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500" />
             </motion.div>
           ))}
         </motion.div>
@@ -536,33 +873,32 @@ function GallerySection() {
   )
 }
 
+// ─── LOCATION ─────────────────────────────────────────────────────────────────
 function LocationSection() {
   return (
-    <section id="ubicacion" className="w-full py-16 md:py-24 bg-card/30">
+    <section id="ubicacion" className="w-full py-16 md:py-24 bg-card/40">
       <div className="container px-4 md:px-6">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="text-center space-y-3 mb-12"
+          className="mb-10"
         >
-          <span className="inline-block px-3 py-1 rounded-3xl bg-card border border-[rgba(255,255,255,0.06)] text-muted-foreground text-sm">
-            Ubicación
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold">Vení a conocer el taller</h2>
+          <span className="section-label">Ubicación</span>
+          <h2 className="font-display text-5xl md:text-6xl text-foreground mt-4 leading-none tracking-wide">
+            VENÍ A CONOCER<br />EL TALLER
+          </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6 items-start">
-          {/* info */}
+        <div className="grid md:grid-cols-2 gap-4 items-start">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="space-y-4"
           >
-            <div className="border border-[rgba(255,255,255,0.06)] rounded-3xl bg-card p-6 space-y-4">
+            <div className="border border-white/5 bg-card p-6 space-y-4">
               <div className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
                 <div>
@@ -576,9 +912,7 @@ function LocationSection() {
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="h-5 w-5 text-accent flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold text-foreground">Lunes a Sábados · 9:00 a 18:00 hs</p>
-                </div>
+                <p className="text-sm font-semibold text-foreground">Lunes a Sábados · 9:00 a 18:00 hs</p>
               </div>
               <div className="flex items-center gap-3">
                 <Car className="h-5 w-5 text-accent flex-shrink-0" />
@@ -594,7 +928,6 @@ function LocationSection() {
             </div>
           </motion.div>
 
-          {/* mapa */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -605,7 +938,7 @@ function LocationSection() {
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3271.5!2d-58.9444555!3d-34.6046258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bc8f5179d017ed%3A0x8eb76d579f08350!2sInstituto%20Superior%20de%20Oficios!5e0!3m2!1ses-419!2sar!4v1711800000000"
               width="100%"
               height="350"
-              style={{ border: 0, borderRadius: "24px" }}
+              style={{ border: 0 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -618,6 +951,7 @@ function LocationSection() {
   )
 }
 
+// ─── FAQ ─────────────────────────────────────────────────────────────────────
 function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
 
@@ -656,12 +990,13 @@ function FAQSection() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="text-center space-y-3 mb-12"
+          className="mb-12"
         >
-          <span className="inline-block px-3 py-1 rounded-3xl bg-card border border-[rgba(255,255,255,0.06)] text-muted-foreground text-sm">
-            Preguntas frecuentes
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold">Todo lo que necesitás saber</h2>
+          <span className="section-label">Preguntas frecuentes</span>
+          <h2 className="font-display text-5xl md:text-6xl text-foreground mt-4 leading-none tracking-wide">
+            TODO LO QUE<br />
+            <span className="text-accent">NECESITÁS SABER</span>
+          </h2>
         </motion.div>
 
         <motion.div
@@ -669,19 +1004,19 @@ function FAQSection() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={staggerContainer}
-          className="max-w-2xl mx-auto space-y-3"
+          className="max-w-2xl space-y-px"
         >
           {items.map(({ q, a }, i) => (
             <motion.div
               key={i}
               variants={itemFadeIn}
-              className="border border-[rgba(255,255,255,0.06)] rounded-3xl bg-card overflow-hidden"
+              className="border border-white/5 bg-card overflow-hidden"
             >
               <button
                 onClick={() => setOpen(open === i ? null : i)}
-                className="w-full flex items-center justify-between px-6 py-4 text-left gap-4"
+                className="w-full flex items-center justify-between px-6 py-4 text-left gap-4 hover:bg-card/80 transition-colors"
               >
-                <span className="font-medium text-foreground">{q}</span>
+                <span className="font-medium text-foreground text-sm">{q}</span>
                 <motion.span
                   animate={{ rotate: open === i ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
@@ -699,7 +1034,9 @@ function FAQSection() {
                     transition={{ duration: 0.25 }}
                     className="overflow-hidden"
                   >
-                    <p className="px-6 pb-5 text-muted-foreground leading-relaxed text-sm">{a}</p>
+                    <p className="px-6 pb-5 text-muted-foreground leading-relaxed text-sm border-t border-white/5">
+                      {a}
+                    </p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -711,6 +1048,7 @@ function FAQSection() {
   )
 }
 
+// ─── STICKY WHATSAPP ─────────────────────────────────────────────────────────
 function StickyWhatsApp() {
   const [visible, setVisible] = useState(false)
 
@@ -730,13 +1068,13 @@ function StickyWhatsApp() {
           className="fixed bottom-6 right-6 z-50"
         >
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
             onClick={trackAndOpen}
-            className="flex items-center gap-2 px-5 py-3 rounded-3xl bg-accent text-accent-foreground font-semibold shadow-2xl backdrop-blur border border-[rgba(255,255,255,0.1)] cursor-pointer"
+            className="flex items-center gap-2 px-5 py-3 bg-accent text-accent-foreground font-bold shadow-2xl cursor-pointer"
           >
             <MessageCircle className="h-5 w-5" />
-            <span className="hidden sm:inline">Inscribirme</span>
+            <span className="hidden sm:inline text-sm">Inscribirme</span>
           </motion.button>
         </motion.div>
       )}
@@ -744,8 +1082,7 @@ function StickyWhatsApp() {
   )
 }
 
-// ─── main component ───────────────────────────────────────────────────────────
-
+// ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 export function ISOLanding() {
   const [scrollY, setScrollY] = useState(0)
 
@@ -757,27 +1094,30 @@ export function ISOLanding() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      {/* ── Header ─────────────────────────────────────────────────────────── */}
+
+      {/* ── HEADER ─────────────────────────────────────────────────────────── */}
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className={`sticky top-0 z-40 w-full border-b border-[rgba(255,255,255,0.06)] bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 ${
-          scrollY > 50 ? "shadow-[0_1px_0_rgba(255,255,255,0.06)]" : ""
+        className={`sticky top-0 z-40 w-full border-b border-white/5 bg-background/90 backdrop-blur ${
+          scrollY > 50 ? "shadow-[0_1px_20px_rgba(0,0,0,0.4)]" : ""
         }`}
       >
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container flex h-14 items-center justify-between">
           <a href="/" className="flex items-center gap-3">
-            <div className="relative h-10 w-10">
+            <div className="relative h-9 w-9">
               <Image src="/iso-logo.png" alt="Logo ISO" fill className="object-contain" />
             </div>
-            <span className="font-bold text-foreground hidden sm:block">Instituto Superior de Oficios</span>
+            <span className="font-display text-lg tracking-widest text-foreground hidden sm:block">
+              INSTITUTO SUPERIOR DE OFICIOS
+            </span>
           </a>
           <motion.button
-            whileHover={{ scale: 1.03 }}
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
             onClick={trackAndOpen}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-3xl bg-accent text-accent-foreground font-semibold text-sm cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground font-bold text-sm cursor-pointer"
           >
             <MessageCircle className="h-4 w-4" />
             Inscribirme
@@ -786,175 +1126,207 @@ export function ISOLanding() {
       </motion.header>
 
       <main className="flex-1">
-        {/* ── Hero ──────────────────────────────────────────────────────────── */}
-        <section className="w-full py-12 md:py-24 lg:py-32 overflow-hidden">
-          <div className="container px-4 md:px-6 border border-[rgba(255,255,255,0.06)] rounded-3xl bg-gradient-to-br from-background to-card/50">
-            <div className="grid gap-8 lg:grid-cols-[1fr_500px] xl:grid-cols-[1fr_580px] py-10">
-              {/* texto */}
+
+        {/* ── HERO ──────────────────────────────────────────────────────────── */}
+        <section className="w-full min-h-[85vh] flex items-center overflow-hidden relative">
+          {/* background image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/hero-tecnico.webp"
+              alt="Técnico en Refrigeración trabajando"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+          </div>
+
+          {/* contenido */}
+          <div className="container px-4 md:px-6 relative z-10 py-16 md:py-24">
+            <div className="max-w-2xl">
+              {/* badge CARHAA */}
               <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={fadeIn}
-                className="flex flex-col justify-center space-y-6"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 border border-white/10 bg-background/60 backdrop-blur px-3 py-1.5 text-sm mb-6"
               >
-                {/* badge */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="inline-flex items-center gap-2 rounded-3xl bg-card border border-[rgba(255,255,255,0.06)] px-3 py-1.5 text-sm w-fit"
-                >
-                  <div className="relative h-5 w-5">
-                    <Image src="/carhaa-logo.png" alt="CARHAA" fill className="object-contain" />
-                  </div>
-                  <span className="text-muted-foreground">Con opción a matrícula profesional CARHAA</span>
-                </motion.div>
-
-                {/* título */}
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.2 }}
-                  className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
-                >
-                  Convertite en Técnico en{" "}
-                  <span className="bg-gradient-to-r from-[#8B1A1A] to-[#E8A830] bg-clip-text text-transparent">
-                    Refrigeración
-                  </span>
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.35 }}
-                  className="text-muted-foreground text-lg max-w-xl"
-                >
-                  Formación práctica con salida laboral real. Cursá solo los viernes, en 6 meses estás trabajando.
-                </motion.p>
-
-                {/* grilla de datos */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.5 }}
-                  className="grid grid-cols-2 gap-3"
-                >
-                  {[
-                    { Icon: Clock, label: "Cursada", value: "Viernes 17–19 hs" },
-                    { Icon: Users, label: "Cupos", value: "10 por comisión" },
-                    { Icon: Award, label: "Inversión", value: "$80.000/mes × 6" },
-                    { Icon: Package, label: "Herramientas", value: "Incluidas" },
-                  ].map(({ Icon, label, value }) => (
-                    <div
-                      key={label}
-                      className="border border-[rgba(255,255,255,0.06)] rounded-2xl bg-card p-3 flex items-center gap-3"
-                    >
-                      <Icon className="h-5 w-5 text-accent flex-shrink-0" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">{label}</p>
-                        <p className="text-sm font-semibold text-foreground">{value}</p>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-
-                {/* CTA */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.65 }}
-                  className="space-y-2"
-                >
-                  <WhatsAppButton label="Quiero inscribirme" large />
-                  <p className="text-muted-foreground text-xs">Te respondemos en menos de 15 minutos</p>
-                </motion.div>
+                <div className="relative h-4 w-4">
+                  <Image src="/carhaa-logo.png" alt="CARHAA" fill className="object-contain" />
+                </div>
+                <span className="text-muted-foreground font-mono text-xs uppercase tracking-widest">
+                  Con opción a matrícula profesional CARHAA
+                </span>
               </motion.div>
 
-              {/* imagen */}
-              <motion.div
-                initial={{ opacity: 0, x: 80 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="relative h-[350px] md:h-[500px] rounded-3xl overflow-hidden"
+              {/* headline */}
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.15 }}
+                className="font-display text-[clamp(3.5rem,8vw,7rem)] leading-none tracking-wide text-foreground"
               >
-                <Image
-                  src="/hero-tecnico.webp"
-                  alt="Técnico en Refrigeración trabajando"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
+                CONVERTITE EN<br />
+                TÉCNICO EN{" "}
+                <span
+                  style={{
+                    WebkitTextStroke: "2px #E8A830",
+                    color: "transparent",
+                  }}
+                >
+                  REFRI
+                </span>
+                <span className="text-accent">GERACIÓN</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+                className="text-foreground/70 text-lg mt-5 max-w-lg leading-relaxed"
+              >
+                Formación 100% práctica. Un día por semana. En 6 meses tenés
+                un oficio con salida laboral real y certificado profesional reconocido.
+              </motion.p>
+
+              {/* stats rápidas */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.45 }}
+                className="grid grid-cols-2 gap-2 mt-7 max-w-sm"
+              >
+                {[
+                  { Icon: Clock, label: "Cursada", value: "Viernes 17–19 hs" },
+                  { Icon: Users, label: "Cupos", value: "10 por comisión" },
+                  { Icon: Award, label: "Inversión", value: "$80.000/mes × 6" },
+                  { Icon: Package, label: "Herramientas", value: "Incluidas" },
+                ].map(({ Icon, label, value }) => (
+                  <div
+                    key={label}
+                    className="border border-white/10 bg-background/50 backdrop-blur p-3 flex items-center gap-2"
+                  >
+                    <Icon className="h-4 w-4 text-accent flex-shrink-0" />
+                    <div>
+                      <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest">{label}</p>
+                      <p className="text-xs font-semibold text-foreground">{value}</p>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* CTA */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.6 }}
+                className="mt-7 flex items-center gap-4"
+              >
+                <WhatsAppButton label="Quiero inscribirme" large />
+                <p className="text-muted-foreground text-xs">
+                  Te respondemos<br />en menos de 15 min
+                </p>
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* ── Countdown ─────────────────────────────────────────────────────── */}
-        <CountdownBlock />
+        {/* ── TRUST BAR ─────────────────────────────────────────────────────── */}
+        <TrustBar />
 
-        {/* ── Módulos ───────────────────────────────────────────────────────── */}
+        {/* ── QUALIFICATION ─────────────────────────────────────────────────── */}
+        <QualificationSection />
+
+        {/* ── MARKET ────────────────────────────────────────────────────────── */}
+        <MarketSection />
+
+        {/* ── MÓDULOS ───────────────────────────────────────────────────────── */}
         <ModulesSection />
 
-        {/* ── Instructor ────────────────────────────────────────────────────── */}
+        {/* ── INSTRUCTOR ────────────────────────────────────────────────────── */}
         <InstructorSection />
+
+        {/* ── TESTIMONIOS ───────────────────────────────────────────────────── */}
+        <TestimonialsSection />
+
+        {/* ── COUNTDOWN ─────────────────────────────────────────────────────── */}
+        <CountdownBlock />
+
+        {/* ── PRECIO ────────────────────────────────────────────────────────── */}
+        <PricingSection />
 
         {/* ── CARHAA ────────────────────────────────────────────────────────── */}
         <CarhaSection />
 
-        {/* ── Precio ────────────────────────────────────────────────────────── */}
-        <PricingSection />
-
-        {/* ── Testimonios ───────────────────────────────────────────────────── */}
-        <TestimonialsSection />
-
-        {/* ── Galería ───────────────────────────────────────────────────────── */}
+        {/* ── GALERÍA ───────────────────────────────────────────────────────── */}
         <GallerySection />
 
-        {/* ── Ubicación ─────────────────────────────────────────────────────── */}
+        {/* ── UBICACIÓN ─────────────────────────────────────────────────────── */}
         <LocationSection />
 
         {/* ── FAQ ───────────────────────────────────────────────────────────── */}
         <FAQSection />
 
-        {/* ── CTA Final ─────────────────────────────────────────────────────── */}
-        <section className="w-full py-16 md:py-24">
-          <div className="container px-4 md:px-6">
+        {/* ── CTA FINAL ─────────────────────────────────────────────────────── */}
+        <section className="w-full py-16 md:py-24 bg-primary relative overflow-hidden">
+          {/* diagonal decoration */}
+          <div className="absolute inset-0 opacity-5">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: "repeating-linear-gradient(45deg, #E8A830 0, #E8A830 1px, transparent 0, transparent 50%)",
+                backgroundSize: "20px 20px",
+              }}
+            />
+          </div>
+
+          <div className="container px-4 md:px-6 relative z-10">
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeIn}
-              className="border border-[rgba(255,255,255,0.06)] rounded-3xl bg-gradient-to-br from-primary/20 to-accent/10 p-10 md:p-16 text-center space-y-6"
+              className="max-w-2xl"
             >
-              <h2 className="text-3xl md:text-4xl font-bold">¿Listo para arrancar?</h2>
-              <p className="text-muted-foreground text-lg max-w-lg mx-auto">
+              <h2 className="font-display text-5xl md:text-7xl text-primary-foreground tracking-wide leading-none">
+                ¿LISTO PARA<br />
+                <span className="text-accent">ARRANCAR?</span>
+              </h2>
+              <p className="text-primary-foreground/60 text-lg mt-4 max-w-lg">
                 Escribinos por WhatsApp y reservá tu lugar en la comisión de abril.
+                Solo quedan 10 cupos.
               </p>
-              <div className="flex flex-col items-center gap-2">
+              <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <WhatsAppButton label="Quiero inscribirme" large />
-                <p className="text-muted-foreground text-sm">Respondemos en menos de 15 minutos</p>
+                <p className="text-primary-foreground/40 text-sm">Respondemos en menos de 15 minutos</p>
               </div>
             </motion.div>
           </div>
         </section>
+
       </main>
 
-      {/* ── Footer ────────────────────────────────────────────────────────────── */}
-      <footer className="border-t border-[rgba(255,255,255,0.06)] py-6">
-        <div className="container px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <div className="relative h-6 w-6">
+      {/* ── FOOTER ────────────────────────────────────────────────────────────── */}
+      <footer className="border-t border-white/5 py-8">
+        <div className="container px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="relative h-8 w-8">
               <Image src="/iso-logo.png" alt="ISO" fill className="object-contain" />
             </div>
-            <span>Instituto Superior de Oficios</span>
+            <span className="font-display text-sm tracking-widest text-muted-foreground">
+              INSTITUTO SUPERIOR DE OFICIOS
+            </span>
           </div>
-          <p>© {new Date().getFullYear()} — Todos los derechos reservados</p>
+          <p className="text-muted-foreground text-xs font-mono">
+            Gral. Roca 869, Morón · info@iso.edu.ar
+          </p>
         </div>
       </footer>
 
-      {/* ── Sticky WhatsApp ───────────────────────────────────────────────────── */}
+      {/* ── STICKY CTA ────────────────────────────────────────────────────────── */}
       <StickyWhatsApp />
+
     </div>
   )
 }

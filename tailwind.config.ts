@@ -61,6 +61,7 @@ const config: Config = {
       fontFamily: {
         sans: ["DM Sans", "sans-serif"],
         mono: ["Space Mono", "monospace"],
+        display: ["Bebas Neue", "cursive"],
       },
       keyframes: {
         "accordion-down": {
