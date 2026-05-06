@@ -252,7 +252,7 @@ function MarketSection() {
   const dataPoints = [
     {
       Icon: Banknote,
-      number: "$300K–$600K",
+      number: "$1,5M–$2,4M",
       label: "por mes",
       desc: "Ingreso promedio de un técnico con experiencia en el AMBA. En temporada alta, más.",
     },
