@@ -54,7 +54,7 @@ const itemFadeIn = {
 const WA_LINK =
   "https://wa.me/5491134404433?text=Hola%2C%20quiero%20inscribirme%20al%20curso%20de%20Refrigeraci%C3%B3n"
 
-const LAUNCH_DATE = new Date("2026-04-03T17:00:00-03:00")
+const LAUNCH_DATE = new Date("2026-05-14T10:00:00-03:00")
 
 function trackAndOpen() {
   if (typeof window !== "undefined" && window.fbq) {
@@ -150,7 +150,7 @@ function QualificationSection() {
   const checks = [
     "Querés aprender un oficio concreto con salida laboral real, no otro título que no sirve",
     "Buscás independizarte o sumar un ingreso extra trabajando por tu cuenta",
-    "Podés dedicar un viernes por semana — solo 2 horas, de 17 a 19 hs",
+    "Podés dedicar un sábado por semana — solo 2 horas, de 10 a 12 hs o de 12 a 14 hs",
     "Estás cansado de no tener una habilidad técnica que te diferencie",
     "Querés un certificado profesional reconocido en toda la industria",
   ]
@@ -331,7 +331,7 @@ function MarketSection() {
           className="mt-6 border border-primary/20 bg-primary/5 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
         >
           <p className="text-sm text-foreground/70 max-w-lg">
-            <span className="text-foreground font-semibold">La inversión en el curso es de $20.000 de inscripción + $80.000/mes × 6 meses.</span>{" "}
+            <span className="text-foreground font-semibold">Técnico en Refrigeración desde $100.000/mes. Intensivo Automotriz $200.000 (o $300.000 los 2 si venís con alguien).</span>{" "}
             Un trabajo de un fin de semana como técnico habilitado puede recuperar ese monto.
           </p>
           <WhatsAppButton label="Quiero saber más" />
@@ -377,7 +377,7 @@ function CountdownBlock() {
               Próximo inicio
             </p>
             <p className="font-display text-4xl md:text-5xl text-primary-foreground tracking-wide">
-              3 DE ABRIL 2026
+              14 DE MAYO 2026
             </p>
             <div className="mt-3 border border-accent/30 bg-accent/10 px-4 py-2 inline-block">
               <p className="text-sm text-accent font-semibold">
@@ -708,7 +708,7 @@ function CarhaSection() {
           <div className="grid md:grid-cols-[auto_1fr] gap-8 items-center">
             <div className="flex justify-center">
               <div className="relative h-28 w-44">
-                <Image src="/carhaa-logo.png" alt="Logo CARHAA" fill className="object-contain" />
+                <Image src="/carhaa-sinBG.png" alt="Logo CARHAA" fill className="object-contain" />
               </div>
             </div>
             <div className="space-y-3">
@@ -734,6 +734,55 @@ function CarhaSection() {
 
 // ─── PRICING ─────────────────────────────────────────────────────────────────
 function PricingSection() {
+  const plans: Array<{
+    label: string
+    title: string
+    price: string
+    priceUnit?: string
+    unit: string
+    features: string[]
+    highlight?: boolean
+    badge?: string
+  }> = [
+    {
+      label: "Plan mensual",
+      title: "Técnico en Refrigeración",
+      price: "$100.000",
+      priceUnit: "/mes",
+      unit: "+ inscripción $20.000 (única vez)",
+      features: [
+        "Cursada los sábados · 2 hs por semana",
+        "Certificado oficial + matrícula CARHAA",
+        "Herramientas y materiales incluidos",
+      ],
+    },
+    {
+      label: "Intensivo · 1 persona",
+      title: "Intensivo Refrigeración Automotriz",
+      price: "$200.000",
+      unit: "+ inscripción $20.000",
+      features: [
+        "Cursada intensiva · Domingo 10 a 18 hs",
+        "Inicio 24/05 · cupos limitados",
+        "Certificado profesional incluido",
+      ],
+    },
+    {
+      label: "Promo 2 personas",
+      title: "Intensivo Automotriz · Vení con alguien",
+      price: "$300.000",
+      priceUnit: "los 2",
+      unit: "+ inscripción $20.000 por persona",
+      features: [
+        "Mismo curso intensivo · Domingo 10 a 18 hs",
+        "Ahorrás $100.000 si venís con un compañero",
+        "Ideal para socios, familia o amigos",
+      ],
+      highlight: true,
+      badge: "Promo 2x",
+    },
+  ]
+
   return (
     <section id="precio" className="w-full py-16 md:py-24">
       <div className="container px-4 md:px-6">
@@ -742,76 +791,96 @@ function PricingSection() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="max-w-lg mx-auto"
+          className="max-w-3xl mx-auto text-center mb-10"
         >
-          <div className="border border-accent/20 overflow-hidden">
-            {/* barra superior */}
-            <div className="h-1 bg-gradient-to-r from-primary to-accent" />
+          <span className="section-label">Oferta · Cupos limitados</span>
+          <h2 className="font-display text-4xl md:text-5xl text-foreground tracking-wide leading-none mt-4">
+            UNA CARRERA POR MENOS<br />DE LO QUE PENSÁS
+          </h2>
+          <p className="text-muted-foreground text-sm md:text-base leading-relaxed mt-4 max-w-xl mx-auto">
+            Elegí el curso que se adapta a vos. ¿Venís con un compañero al intensivo de
+            automotriz? Te llevás la promo de 2 personas.
+          </p>
+        </motion.div>
 
-            <div className="bg-card p-8 md:p-10 space-y-6">
-              {/* header */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="section-label">Oferta · Cupos limitados</span>
-                  <span className="font-mono text-xs text-accent animate-pulse">● 10 cupos</span>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto items-stretch"
+        >
+          {plans.map((p) => (
+            <motion.div
+              key={p.title}
+              variants={itemFadeIn}
+              className={`relative flex flex-col border overflow-hidden ${
+                p.highlight
+                  ? "border-accent md:scale-[1.03] md:-translate-y-1"
+                  : "border-white/10"
+              }`}
+            >
+              <div className={`h-1 ${p.highlight ? "bg-accent" : "bg-gradient-to-r from-primary/50 to-accent/30"}`} />
+
+              {p.badge && (
+                <div className="absolute top-3 right-3 bg-accent text-accent-foreground text-[10px] font-bold uppercase tracking-widest px-2 py-1">
+                  {p.badge}
                 </div>
-                <h2 className="font-display text-4xl md:text-5xl text-foreground tracking-wide leading-none mt-3">
-                  UNA CARRERA POR MENOS<br />DE LO QUE PENSÁS
-                </h2>
-                <p className="text-muted-foreground text-sm leading-relaxed mt-2">
-                  Una habilidad concreta, un certificado real y una profesión con demanda creciente.
-                  Todo en 6 meses, un día por semana.
-                </p>
-              </div>
+              )}
 
-              {/* precio */}
-              <div className="bg-background p-6 space-y-1 border border-white/5">
-                <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest">Solo pagás</p>
-                <div className="flex items-end gap-2">
-                  <span className="font-display text-6xl text-accent leading-none tracking-wide">$80.000</span>
-                  <span className="text-muted-foreground mb-1 text-sm">/mes · 6 meses</span>
+              <div className={`flex-1 flex flex-col p-6 md:p-7 space-y-5 ${p.highlight ? "bg-card" : "bg-card/60"}`}>
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{p.label}</p>
+                  <h3 className="font-display text-2xl text-foreground tracking-wide leading-tight mt-2">
+                    {p.title}
+                  </h3>
                 </div>
-                <p className="text-muted-foreground text-xs">+ Inscripción $20.000 (única vez)</p>
-              </div>
 
-              {/* beneficios */}
-              <ul className="space-y-2.5">
-                {[
-                  "Cursás solo los viernes — seguís trabajando",
-                  "Certificado oficial + matrícula CARHAA",
-                  "Herramientas y materiales incluidos",
-                  "Salida laboral real desde el primer mes",
-                ].map((b) => (
-                  <li key={b} className="flex items-center gap-3 text-sm text-foreground">
-                    <div className="h-5 w-5 bg-accent/15 flex items-center justify-center flex-shrink-0">
-                      <Check className="h-3 w-3 text-accent" />
-                    </div>
-                    {b}
-                  </li>
-                ))}
-              </ul>
+                <div className="bg-background border border-white/5 p-4 space-y-1">
+                  <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">Solo pagás</p>
+                  <div className="flex items-end gap-1.5">
+                    <span className="font-display text-4xl md:text-5xl text-accent leading-none tracking-wide">
+                      {p.price}
+                    </span>
+                    {p.priceUnit && (
+                      <span className="text-muted-foreground mb-1 text-xs">{p.priceUnit}</span>
+                    )}
+                  </div>
+                  <p className="text-muted-foreground text-xs">{p.unit}</p>
+                </div>
 
-              {/* medios de pago */}
-              <div className="flex flex-wrap gap-2">
-                {["Efectivo", "Transferencia", "Tarjeta (MercadoPago)"].map((m) => (
-                  <span
-                    key={m}
-                    className="px-3 py-1 border border-white/10 bg-background text-xs text-muted-foreground font-mono"
-                  >
-                    {m}
-                  </span>
-                ))}
-              </div>
+                <ul className="space-y-2 flex-1">
+                  {p.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-xs md:text-sm text-foreground/90 leading-snug">
+                      <div className="h-4 w-4 bg-accent/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Check className="h-2.5 w-2.5 text-accent" />
+                      </div>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
 
-              {/* CTA */}
-              <div className="pt-2 flex flex-col items-stretch gap-3">
-                <WhatsAppButton label="Quiero reservar mi lugar" large />
-                <p className="text-muted-foreground text-xs text-center">
-                  Los cupos se agotan — respondemos en menos de 15 min
-                </p>
+                <WhatsAppButton label={p.highlight ? "Quiero la promo" : "Quiero este plan"} />
               </div>
-            </div>
-          </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeIn}
+          className="mt-8 max-w-3xl mx-auto flex flex-wrap items-center justify-center gap-2"
+        >
+          {["Efectivo", "Transferencia", "Tarjeta (MercadoPago)"].map((m) => (
+            <span
+              key={m}
+              className="px-3 py-1 border border-white/10 bg-card text-xs text-muted-foreground font-mono"
+            >
+              {m}
+            </span>
+          ))}
         </motion.div>
       </div>
     </section>
@@ -906,9 +975,19 @@ function LocationSection() {
                   <p className="text-muted-foreground text-sm">Gral. Roca 869, Morón, Buenos Aires</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <Calendar className="h-5 w-5 text-accent flex-shrink-0" />
-                <p className="text-muted-foreground text-sm">Viernes 17:00 a 19:00 hs</p>
+              <div className="flex items-start gap-3">
+                <Calendar className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                <div className="space-y-2">
+                  <div>
+                    <p className="text-xs font-mono uppercase tracking-widest text-accent/80">Técnico en Refrigeración</p>
+                    <p className="text-muted-foreground text-sm">Sábados 10:00 a 12:00 hs · inicio 14/05</p>
+                    <p className="text-muted-foreground text-sm">Sábados 12:00 a 14:00 hs · inicio 13/06</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-mono uppercase tracking-widest text-accent/80">Cursada intensiva · Refrigeración automotriz</p>
+                    <p className="text-muted-foreground text-sm">Domingo 10:00 a 18:00 hs · inicio 24/05</p>
+                  </div>
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="h-5 w-5 text-accent flex-shrink-0" />
@@ -1198,9 +1277,9 @@ export function ISOLanding() {
                 className="grid grid-cols-2 gap-2 mt-7 max-w-sm"
               >
                 {[
-                  { Icon: Clock, label: "Cursada", value: "Viernes 17–19 hs" },
+                  { Icon: Clock, label: "Cursada", value: "Sábados 10–12 / 12–14 hs" },
                   { Icon: Users, label: "Cupos", value: "10 por comisión" },
-                  { Icon: Award, label: "Inversión", value: "$80.000/mes × 6" },
+                  { Icon: Award, label: "Inversión", value: "Desde $100.000" },
                   { Icon: Package, label: "Herramientas", value: "Incluidas" },
                 ].map(({ Icon, label, value }) => (
                   <div
