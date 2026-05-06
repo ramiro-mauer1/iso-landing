@@ -570,7 +570,7 @@ function InstructorSection() {
                   IVÁN
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Técnico en refrigeración con 15 años de experiencia en el rubro. Capacitó a más de 400 alumnos
+                  Técnico en refrigeración con 17 años de experiencia en el rubro. Capacitó a más de 400 alumnos
                   y sigue trabajando activamente en instalaciones y service, llevando al aula lo que vive todos
                   los días en el campo.
                 </p>
